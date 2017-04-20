@@ -1,0 +1,100 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX 5
+
+typedef struct elementos {
+    char nome[50];	
+} t_elemento;
+
+typedef struct fila {
+    t_elemento vetor[MAX]; // vetor que armazena a fila
+    int ini; // posicao do primeiro elemento
+    int fim;    // posicao do ultimo elemento
+    int num_element;    // numero de elementos da fila
+} t_fila;
+
+t_fila novo(){
+	//Cria nova fila
+	t_fila fila = {""};
+	
+	fila.ini = 0;
+	fila.fim = -1;
+	fila.num_element = 0;
+	
+	return fila;
+};
+
+void inserir(t_fila*fila, t_elemento valor) {
+	//Funcao que faz a insercao, precisa receber um endereco para n usar uma copia da variavel
+	
+	(fila -> num_element)++;
+	fila->fim = fila -> fim + 1 %MAX;
+	fila->vetor[fila->fim] = valor;
+	//Tem que usar o fim pois o inicio varia na fila circular
+};
+
+t_elemento remover(t_fila*fila){
+	
+	t_elemento valor = {""};
+	valor = fila->vetor[fila->ini];
+	fila->vetor[fila->ini].nome[0] = '\n';
+	(fila->num_element)--;
+	fila->ini=(fila->ini + 1)%MAX;
+	return valor;
+	
+};
+
+void exibir(t_fila * fila, int j) {
+	
+    int i;
+    
+    printf("\n ----- Exibindo fila -----\n");
+    printf("      Inicio da fila: %d\n", (fila->ini + 1));
+    printf("      Fim    da fila: %d\n\n", (fila->fim + 1));
+    for (i=0 ; i<MAX ; i++) {
+        printf("Posicao [%d] :: %s\n", (i+1), fila->vetor[i].nome);
+        if (j==i){
+        	break;
+		}
+    }
+}
+
+void exibir1(t_fila * fila) {
+	
+    int i;
+    
+    printf("\n ----- Exibindo fila -----\n");
+    printf("      Inicio da fila: %d\n", (fila->ini + 1));
+    printf("      Fim    da fila: %d\n\n", (fila->fim + 1));
+    for (i=0 ; i<MAX ; i++) {
+        printf("Posicao [%d] :: %s\n", (i+1), fila->vetor[i].nome);
+    }
+}
+
+void loopInserir(t_fila * fila){
+	
+	t_elemento dado;
+	int i=0;
+	for(i=0; i<4; i++){
+		printf("Insira um nome: ");
+		scanf("%s",dado.nome);
+		inserir(fila, dado);
+		exibir(fila, i);	
+	}
+}
+
+int main(){
+	
+	int i=0;
+	t_fila Fila = novo();
+	loopInserir(&Fila);
+	
+	for (i=0; i<3; i++){
+		remover(&Fila);
+		exibir1(&Fila);
+		system("pause");
+		system("cls");
+	}
+	
+	return 0;
+}
