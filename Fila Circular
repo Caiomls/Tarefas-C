@@ -9,6 +9,7 @@ typedef struct elementos {
 typedef struct fila {
     t_elemento vetor[MAX]; // vetor que armazena a fila
     int ini; // posicao do primeiro elemento
+    int max; //capacidade maxima da lista
     int fim;    // posicao do ultimo elemento
     int num_element;    // numero de elementos da fila
 } t_fila;
@@ -20,7 +21,7 @@ t_fila novo(){
 	fila.ini = 0;
 	fila.fim = -1;
 	fila.num_element = 0;
-	
+	fila.max = 5;
 	return fila;
 };
 
@@ -28,7 +29,7 @@ void inserir(t_fila*fila, t_elemento valor) {
 	//Funcao que faz a insercao, precisa receber um endereco para n usar uma copia da variavel
 	
 	(fila -> num_element)++;
-	fila->fim = fila -> fim + 1 %MAX;
+	fila->fim = (fila -> fim + 1) %MAX;
 	fila->vetor[fila->fim] = valor;
 	//Tem que usar o fim pois o inicio varia na fila circular
 };
@@ -37,39 +38,28 @@ t_elemento remover(t_fila*fila){
 	
 	t_elemento valor = {""};
 	valor = fila->vetor[fila->ini];
-	fila->vetor[fila->ini].nome[0] = '\n';
+	fila->vetor[fila->ini].nome[0] = '\0';
 	(fila->num_element)--;
 	fila->ini=(fila->ini + 1)%MAX;
 	return valor;
 	
 };
 
-void exibir(t_fila * fila, int j) {
+void exibir(t_fila * fila) {
 	
-    int i;
-    
-    printf("\n ----- Exibindo fila -----\n");
-    printf("      Inicio da fila: %d\n", (fila->ini + 1));
-    printf("      Fim    da fila: %d\n\n", (fila->fim + 1));
-    for (i=0 ; i<MAX ; i++) {
-        printf("Posicao [%d] :: %s\n", (i+1), fila->vetor[i].nome);
-        if (j==i){
-        	break;
-		}
-    }
+    int cont, i;
+	
+	for ( cont=0, i= fila->ini; cont < fila->num_element; cont++){
+
+		printf("    Posicao [%d] :: %s\n",(cont + 1),fila->vetor[i++]);
+
+		if (i == fila->max)
+			i=0;
+
+	}
+	printf("\n\n");
 }
 
-void exibir1(t_fila * fila) {
-	
-    int i;
-    
-    printf("\n ----- Exibindo fila -----\n");
-    printf("      Inicio da fila: %d\n", (fila->ini + 1));
-    printf("      Fim    da fila: %d\n\n", (fila->fim + 1));
-    for (i=0 ; i<MAX ; i++) {
-        printf("Posicao [%d] :: %s\n", (i+1), fila->vetor[i].nome);
-    }
-}
 
 void loopInserir(t_fila * fila){
 	
@@ -79,10 +69,11 @@ void loopInserir(t_fila * fila){
 		printf("Insira um nome: ");
 		scanf("%s",dado.nome);
 		inserir(fila, dado);
-		exibir(fila, i);	
+		exibir(fila);
+		system("pause");
+		system("cls");	
 	}
 }
-
 int main(){
 	
 	int i=0;
@@ -91,10 +82,11 @@ int main(){
 	
 	for (i=0; i<3; i++){
 		remover(&Fila);
-		exibir1(&Fila);
+		exibir(&Fila);
 		system("pause");
 		system("cls");
 	}
 	
+	loopInserir(&Fila);
 	return 0;
 }
